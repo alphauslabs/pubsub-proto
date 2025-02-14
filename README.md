@@ -1,54 +1,11 @@
-### Publish a Message
-resp, err := client.Publish(ctx, &pubsubproto.Message{
-    Id:        "msg-123",
-    TopicId:   "topic-1",
-    Payload:   []byte("Hello, world!"),
-    CreatedAt: time.Now().Unix(),
-    ExpiresAt: time.Now().Add(time.Hour).Unix(),
-})
-if err != nil {
-    log.Fatal(err)
-}
-fmt.Println("Published Message ID:", resp.MessageId)
 
-### Subscribe to a Topic
+You need to install few things to start contributing:
 
-stream, err := client.Subscribe(ctx, &pubsubproto.SubscribeRequest{
-    SubscriptionId: "sub-1",
-    VisibilityTimeout: 30,
-})
-if err != nil {
-    log.Fatal(err)
-}
+- The [protoc](https://protobuf.dev/installation/) tool, a protocol buffer compiler.
 
-for {
-    msg, err := stream.Recv()
-    if err == io.EOF {
-        break
-    }
-    if err != nil {
-        log.Fatal(err)
-    }
-    fmt.Println("Received Message:", string(msg.Payload))
-}
+- The following compiler plugins:
 
-###Acknowledge a Message
-ackResp, err := client.Acknowledge(ctx, &pubsubproto.AcknowledgeRequest{
-    SubscriptionId: "sub-1",
-    MessageId:      "msg-123",
-})
-if err != nil {
-    log.Fatal(err)
-}
-fmt.Println("Acknowledged:", ackResp.Acknowledge)
-
-
-###Modify Visibility Timeout
-resp, err := client.ModifyVisibilityTimeout(ctx, &pubsubproto.ModifyVisibilityTimeoutRequest{
-    MessageId: "msg-123",
-    NewTimeout: 60,
-})
-if err != nil {
-    log.Fatal(err)
-}
-fmt.Println("Visibility Timeout Updated:", resp.Success)
+```bash
+$ go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+$ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+```
