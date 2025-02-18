@@ -1,3 +1,7 @@
+I've created this branch just in case the original branch won't work.
+The generated file on the other branch is based on the pubsub-proto repo
+This branch package is based on this repo
+
 
 You need to install few things to start contributing:
 
@@ -9,10 +13,27 @@ You need to install few things to start contributing:
 $ go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 $ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 ```
+
 To update generated files:
 
 ```bash
-$ protoc --go_out=. --go_opt=paths=source_relative \
-    --go-grpc_out=. --go-grpc_opt=paths=source_relative \
-    pubsub.proto
+make generate_grpc_code
 ```
+
+to update the go libs
+
+```bash
+go get -u google.golang.org/grpc
+```
+it should fade the errors in pubsub_grpc.pb.go and pubsub.pb.go
+
+To cleanup go.mod run this:
+```bash
+go mod tidy
+```
+if error persists in go.mod
+delete go.sum and rerun go mod tidy
+
+export GO_PATH=~/go
+export PATH=$PATH:/$GO_PATH/bin
+source ~/.bash_profile
