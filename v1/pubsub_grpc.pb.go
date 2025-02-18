@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.5.1
 // - protoc             v5.29.3
-// source: proto/v1/pubsub.proto
+// source: v1/pubsub.proto
 
 package pubsubproto
 
@@ -28,6 +28,8 @@ const (
 // PubSubServiceClient is the client API for PubSubService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// PubSubService defines methods for publishing and subscribing to messages
 type PubSubServiceClient interface {
 	// Publish a message to a topic
 	Publish(ctx context.Context, in *Message, opts ...grpc.CallOption) (*PublishResponse, error)
@@ -99,6 +101,8 @@ func (c *pubSubServiceClient) ModifyVisibilityTimeout(ctx context.Context, in *M
 // PubSubServiceServer is the server API for PubSubService service.
 // All implementations must embed UnimplementedPubSubServiceServer
 // for forward compatibility.
+//
+// PubSubService defines methods for publishing and subscribing to messages
 type PubSubServiceServer interface {
 	// Publish a message to a topic
 	Publish(context.Context, *Message) (*PublishResponse, error)
@@ -243,5 +247,5 @@ var PubSubService_ServiceDesc = grpc.ServiceDesc{
 			ServerStreams: true,
 		},
 	},
-	Metadata: "proto/v1/pubsub.proto",
+	Metadata: "v1/pubsub.proto",
 }
