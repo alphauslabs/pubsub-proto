@@ -26,11 +26,15 @@ service PubSubService {
   rpc Subscribe(SubscribeRequest) returns (stream Message) {}
   rpc Acknowledge(AcknowledgeRequest) returns (AcknowledgeResponse) {}
   rpc ModifyVisibilityTimeout(ModifyVisibilityTimeoutRequest) returns (ModifyVisibilityTimeoutResponse) {}
+
+  // Leader Config Operations
+  rpc GetLeaderConfig(GetLeaderConfigRequest) returns (LeaderConfig) {}
+
 }
 
 // --- Topic Definitions ---
 message Topic {
-  string id = 1;    // Unique ID for the topic
+  string topic_id = 1;    // Unique ID for the topic
   string name = 2;  // Human-readable name for the topic
 }
 
@@ -44,7 +48,7 @@ message GetTopicRequest {
 
 message UpdateTopicRequest {
   string id = 1;      // ID of the topic to update
-  string new_name = 2; // New name for the topic
+  optional string new_name = 2; // New name for the topic
 }
 
 message DeleteTopicRequest {
@@ -98,7 +102,7 @@ message Message {
   string payload = 2;                 // Content of the message
   google.protobuf.Timestamp createdAt = 3; // Timestamp when the message was created
   google.protobuf.Timestamp updatedAt = 4; // Timestamp when the message was last updated
-  string topic = 5;                // ID of the topic this message belongs to
+  string topic_id = 5;                // ID of the topic this message belongs to
 }
 
 message PublishRequest {
@@ -130,6 +134,17 @@ message ModifyVisibilityTimeoutRequest {
 
 message ModifyVisibilityTimeoutResponse {
   bool success = 1;                   // Indicates if the modification was successful
+}
+
+// --- LeaderConfig Definitions ---
+message LeaderConfig {
+  string id = 1;
+  string ip_address = 2;
+  google.protobuf.Timestamp last_seen = 3;
+}
+
+message GetLeaderConfigRequest {
+  string id = 1;
 }
 
 //  --- Empty Message ---
