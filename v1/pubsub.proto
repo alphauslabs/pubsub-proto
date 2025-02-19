@@ -3,74 +3,149 @@ syntax = "proto3";
 package pubsubproto;
 
 option go_package = "github.com/alphauslabs/pubsubproto";
+import "google/protobuf/timestamp.proto";
 
-// PubSubService defines methods for publishing and subscribing to messages
+// PubSubService defines the main service for pub/sub operations and CRUD for topics/subscriptions.
 service PubSubService {
-  // Publish a message to a topic
-  rpc Publish(Message) returns (PublishResponse) {}
+  // --- CRUD Operations for Topics ---
+  rpc CreateTopic(CreateTopicRequest) returns (Topic) {}
+  rpc GetTopic(GetTopicRequest) returns (Topic) {}
+  rpc UpdateTopic(UpdateTopicRequest) returns (Topic) {}
+  rpc DeleteTopic(DeleteTopicRequest) returns (DeleteTopicResponse) {}
+  rpc ListTopics(Empty) returns (ListTopicsResponse) {}
 
-  // Subscribe to a topic and receive messages
+  // --- CRUD Operations for Subscriptions ---
+  rpc CreateSubscription(CreateSubscriptionRequest) returns (Subscription) {}
+  rpc GetSubscription(GetSubscriptionRequest) returns (Subscription) {}
+  rpc UpdateSubscription(UpdateSubscriptionRequest) returns (Subscription) {}
+  rpc DeleteSubscription(DeleteSubscriptionRequest) returns (DeleteSubscriptionResponse) {}
+  rpc ListSubscriptions(Empty) returns (ListSubscriptionsResponse) {}
+
+  // --- Pub/Sub Operations ---
+  rpc Publish(PublishRequest) returns (PublishResponse) {}
   rpc Subscribe(SubscribeRequest) returns (stream Message) {}
-
-  // Acknowledge receipt of a message
   rpc Acknowledge(AcknowledgeRequest) returns (AcknowledgeResponse) {}
-
-  // Modify the visibility timeout of a message
   rpc ModifyVisibilityTimeout(ModifyVisibilityTimeoutRequest) returns (ModifyVisibilityTimeoutResponse) {}
+
+  // Leader Config Operations
+  rpc GetLeaderConfig(GetLeaderConfigRequest) returns (LeaderConfig) {}
+
 }
 
-// Topic represents a topic in the pub/sub system
+// --- Topic Definitions ---
 message Topic {
-  string id = 1;
-  string name = 2;
+  string topic_id = 1;    // Unique ID for the topic
+  string name = 2;  // Human-readable name for the topic
 }
 
-// Subscription represents a subscription to a topic
+message CreateTopicRequest {
+  string name = 1;  // Name of the topic to create
+}
+
+message GetTopicRequest {
+  string id = 1;    // ID of the topic to retrieve
+}
+
+message UpdateTopicRequest {
+  string id = 1;      // ID of the topic to update
+  optional string new_name = 2; // New name for the topic
+}
+
+message DeleteTopicRequest {
+  string id = 1;      // ID of the topic to delete
+}
+
+message DeleteTopicResponse {
+  bool success = 1;   // Indicates if the deletion was successful
+}
+
+message ListTopicsResponse {
+  repeated Topic topics = 1; // List of all topics
+}
+
+// --- Subscription Definitions ---
 message Subscription {
-  string id = 1;
-  string name = 2;
-  string topic_id = 3;
-  int32 visibility_timeout = 4;
+  string id = 1;                // Unique ID for the subscription
+  string topic_id = 2;          // ID of the topic this subscription belongs to
+  int32 visibility_timeout = 3; // Default visibility timeout (in seconds)
 }
 
-// Message represents a pub/sub message
+message CreateSubscriptionRequest {
+  string topic_id = 1;          // ID of the topic to subscribe to
+  int32 visibility_timeout = 2; // Default visibility timeout (in seconds)
+}
+
+message GetSubscriptionRequest {
+  string id = 1;                // ID of the subscription to retrieve
+}
+
+message UpdateSubscriptionRequest {
+  string id = 1;                // ID of the subscription to update
+  int32 visibility_timeout = 2; // New visibility timeout (in seconds)
+}
+
+message DeleteSubscriptionRequest {
+  string id = 1;                // ID of the subscription to delete
+}
+
+message DeleteSubscriptionResponse {
+  bool success = 1;             // Indicates if the deletion was successful
+}
+
+message ListSubscriptionsResponse {
+  repeated Subscription subscriptions = 1; // List of all subscriptions
+}
+
+// --- Pub/Sub Message Definitions ---
 message Message {
-  string id = 1;
-  string topic = 2;
-  bytes payload = 3;
-  // int64 created_at = 4; 
-  // int64 updated_at = 5;
+  string id = 1;                      // Unique ID for the message
+  string payload = 2;                 // Content of the message
+  google.protobuf.Timestamp createdAt = 3; // Timestamp when the message was created
+  google.protobuf.Timestamp updatedAt = 4; // Timestamp when the message was last updated
+  string topic_id = 5;                // ID of the topic this message belongs to
 }
 
-// Response for Publish RPC
+message PublishRequest {
+  string topic_id = 1;                // ID of the topic to publish to
+  string payload = 2;                 // Content of the message to publish
+}
+
 message PublishResponse {
-  string message_id = 1;
+  string message_id = 1;              // ID of the published message
 }
 
-// Request to subscribe to a topic
 message SubscribeRequest {
-  string subscription_id = 1;
-  int32 visibility_timeout = 2;
+  string subscription_id = 1;         // ID of the subscription to pull messages from
 }
 
-// Request to acknowledge a received message
 message AcknowledgeRequest {
-  string subscription_id = 1;
-  string message_id = 2;
+  string subscription_id = 1;         // ID of the subscription
+  string message_id = 2;              // ID of the message to acknowledge
 }
 
-// Response for Acknowledge RPC
 message AcknowledgeResponse {
-  bool acknowledge = 1;
+  bool success = 1;                   // Indicates if the acknowledgment was successful
 }
 
-// Request to modify the visibility timeout of a message
 message ModifyVisibilityTimeoutRequest {
-  string message_id = 1;
-  int32 new_timeout = 2;
+  string message_id = 1;              // ID of the message to modify
+  int32 new_timeout = 2;              // New visibility timeout (in seconds)
 }
 
-// Response for ModifyVisibilityTimeout RPC
 message ModifyVisibilityTimeoutResponse {
-  bool success = 1;
+  bool success = 1;                   // Indicates if the modification was successful
 }
+
+// --- LeaderConfig Definitions ---
+message LeaderConfig {
+  string id = 1;
+  string ip_address = 2;
+  google.protobuf.Timestamp last_seen = 3;
+}
+
+message GetLeaderConfigRequest {
+  string id = 1;
+}
+
+//  --- Empty Message ---
+message Empty {}
