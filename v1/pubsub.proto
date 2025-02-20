@@ -34,7 +34,7 @@ service PubSubService {
 
 // --- Topic Definitions ---
 message Topic {
-  string topic_id = 1;    // Unique ID for the topic
+  string topic = 1;    // Unique ID for the topic
   string name = 2;  // Human-readable name for the topic
 }
 
@@ -66,12 +66,12 @@ message ListTopicsResponse {
 // --- Subscription Definitions ---
 message Subscription {
   string id = 1;                // Unique ID for the subscription
-  string topic_id = 2;          // ID of the topic this subscription belongs to
+  string topic = 2;          // ID of the topic this subscription belongs to
   int32 visibility_timeout = 3; // Default visibility timeout (in seconds)
 }
 
 message CreateSubscriptionRequest {
-  string topic_id = 1;          // ID of the topic to subscribe to
+  string topic = 1;          // ID of the topic to subscribe to
   int32 visibility_timeout = 2; // Default visibility timeout (in seconds)
 }
 
@@ -100,13 +100,11 @@ message ListSubscriptionsResponse {
 message Message {
   string id = 1;                      // Unique ID for the message
   string payload = 2;                 // Content of the message
-  google.protobuf.Timestamp createdAt = 3; // Timestamp when the message was created
-  google.protobuf.Timestamp updatedAt = 4; // Timestamp when the message was last updated
-  string topic_id = 5;                // ID of the topic this message belongs to
+  string topic = 5;                  // topic this message belongs to
 }
 
 message PublishRequest {
-  string topic_id = 1;                // ID of the topic to publish to
+  string topic = 1;                // ID of the topic to publish to
   string payload = 2;                 // Content of the message to publish
 }
 
