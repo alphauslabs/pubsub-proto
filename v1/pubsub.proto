@@ -34,25 +34,25 @@ service PubSubService {
 
 // --- Topic Definitions ---
 message Topic {
-  string topic = 1;    // Unique ID for the topic
-  string name = 2;  // Human-readable name for the topic
+  string id = 1;    // Unique ID for the topic
+  string topic = 2;  // Human-readable name for the topic
 }
 
 message CreateTopicRequest {
-  string name = 1;  // Name of the topic to create
+  string topic = 1;  // Name of the topic to create
 }
 
 message GetTopicRequest {
-  string id = 1;    // ID of the topic to retrieve
+  string topic = 1;    // ID of the topic to retrieve
 }
 
 message UpdateTopicRequest {
-  string id = 1;      // ID of the topic to update
-  optional string new_name = 2; // New name for the topic
+  string topic = 1;      // ID of the topic to update
+  optional string new_topic = 2; // New name for the topic
 }
 
 message DeleteTopicRequest {
-  string id = 1;      // ID of the topic to delete
+  string topic = 1;      // ID of the topic to delete
 }
 
 message DeleteTopicResponse {
@@ -76,16 +76,16 @@ message CreateSubscriptionRequest {
 }
 
 message GetSubscriptionRequest {
-  string id = 1;                // ID of the subscription to retrieve
+  string topic = 1;                // ID of the subscription to retrieve
 }
 
 message UpdateSubscriptionRequest {
-  string id = 1;                // ID of the subscription to update
+  string topic = 1;                // ID of the subscription to update
   int32 visibility_timeout = 2; // New visibility timeout (in seconds)
 }
 
 message DeleteSubscriptionRequest {
-  string id = 1;                // ID of the subscription to delete
+  string topic = 1;                // ID of the subscription to delete
 }
 
 message DeleteSubscriptionResponse {
@@ -101,6 +101,8 @@ message Message {
   string id = 1;                      // Unique ID for the message
   string payload = 2;                 // Content of the message
   string topic = 5;                  // topic this message belongs to
+  ModifyVisibilityTimeoutRequest modify_visibility_timeout = 6; // Request to modify the visibility timeout
+  bool processed = 7;                 // Indicates if the message has been processed
 }
 
 message PublishRequest {
@@ -118,7 +120,7 @@ message SubscribeRequest {
 
 message AcknowledgeRequest {
   string subscription_id = 1;         // ID of the subscription
-  string message_id = 2;              // ID of the message to acknowledge
+  string id = 2;                      // ID of the message to acknowledge
 }
 
 message AcknowledgeResponse {
@@ -126,7 +128,7 @@ message AcknowledgeResponse {
 }
 
 message ModifyVisibilityTimeoutRequest {
-  string message_id = 1;              // ID of the message to modify
+  string id = 1;                     // ID of the message to modify
   int32 new_timeout = 2;              // New visibility timeout (in seconds)
 }
 
