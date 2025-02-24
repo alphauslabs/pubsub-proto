@@ -5,58 +5,60 @@ package pubsubproto;
 option go_package = "github.com/alphauslabs/pubsubproto";
 import "google/protobuf/timestamp.proto";
 
-// PubSubService defines the main service for pub/sub operations and CRUD for topics/subscriptions.
+//Service for Pub/Sub
 service PubSubService {
-  // --- CRUD Operations for Topics ---
+
+  // crud-topic
   rpc CreateTopic(CreateTopicRequest) returns (Topic) {}
   rpc GetTopic(GetTopicRequest) returns (Topic) {}
   rpc UpdateTopic(UpdateTopicRequest) returns (Topic) {}
   rpc DeleteTopic(DeleteTopicRequest) returns (DeleteTopicResponse) {}
   rpc ListTopics(Empty) returns (ListTopicsResponse) {}
 
-  // --- CRUD Operations for Subscriptions ---
+  // crud-subscription
   rpc CreateSubscription(CreateSubscriptionRequest) returns (Subscription) {}
   rpc GetSubscription(GetSubscriptionRequest) returns (Subscription) {}
   rpc UpdateSubscription(UpdateSubscriptionRequest) returns (Subscription) {}
   rpc DeleteSubscription(DeleteSubscriptionRequest) returns (DeleteSubscriptionResponse) {}
   rpc ListSubscriptions(Empty) returns (ListSubscriptionsResponse) {}
 
-  // --- Pub/Sub Operations ---
+  // pub sub operations
   rpc Publish(PublishRequest) returns (PublishResponse) {}
   rpc Subscribe(SubscribeRequest) returns (stream Message) {}
   rpc Acknowledge(AcknowledgeRequest) returns (AcknowledgeResponse) {}
   rpc ModifyVisibilityTimeout(ModifyVisibilityTimeoutRequest) returns (ModifyVisibilityTimeoutResponse) {}
 
-  // Leader Config Operations
+  // Leader Config Operations - for leaderconfig communication
   rpc GetLeaderConfig(GetLeaderConfigRequest) returns (LeaderConfig) {}
-
 }
 
 // --- Topic Definitions ---
 message Topic {
   string id = 1;    // Unique ID for the topic
-  string topic = 2;  // Human-readable name for the topic
+  string name = 2;  // Human-readable name for the topic
+  google.protobuf.Timestamp created_at = 3;
+  google.protobuf.Timestamp updated_at = 4;
 }
 
 message CreateTopicRequest {
-  string topic = 1;  // Name of the topic to create
+  string name = 1;        // Name of the topic to create
 }
 
 message GetTopicRequest {
-  string topic = 1;    // ID of the topic to retrieve
+  string id = 1;          // ID of the topic to retrieve
 }
 
 message UpdateTopicRequest {
-  string topic = 1;      // ID of the topic to update
-  optional string new_topic = 2; // New name for the topic
+  string id = 1;          // ID of the topic to update
+  string new_name = 2;    // New name for the topic
 }
 
 message DeleteTopicRequest {
-  string topic = 1;      // ID of the topic to delete
+  string id = 1;          // ID of the topic to delete
 }
 
 message DeleteTopicResponse {
-  bool success = 1;   // Indicates if the deletion was successful
+  bool success = 1;       // Indicates if the deletion was successful
 }
 
 message ListTopicsResponse {
@@ -66,30 +68,31 @@ message ListTopicsResponse {
 // --- Subscription Definitions ---
 message Subscription {
   string id = 1;                // Unique ID for the subscription
-  string topic = 2;          // ID of the topic this subscription belongs to
+  string topic_id = 2;          // ID of the topic this subscription belongs to
   int32 visibility_timeout = 3; // Default visibility timeout (in seconds)
 }
 
 message CreateSubscriptionRequest {
-  string topic = 1;          // ID of the topic to subscribe to
-  int32 visibility_timeout = 2; // Default visibility timeout (in seconds)
+  string topic_id = 1;                 // ID of the topic to subscribe to
+  int32 visibility_timeout = 2;       // Default visibility timeout (in seconds)
 }
 
 message GetSubscriptionRequest {
-  string topic = 1;                // ID of the subscription to retrieve
+  string id = 1;                        // ID of the subscription to retrieve
 }
 
 message UpdateSubscriptionRequest {
-  string topic = 1;                // ID of the subscription to update
-  int32 visibility_timeout = 2; // New visibility timeout (in seconds)
+  string id = 1;                       // ID of the subscription to update
+  int32 modify_visibility_timeout = 2; // New visibility timeout (in seconds)
 }
 
 message DeleteSubscriptionRequest {
-  string topic = 1;                // ID of the subscription to delete
+  string id = 1;                // ID of the subscription to delete
 }
 
 message DeleteSubscriptionResponse {
   bool success = 1;             // Indicates if the deletion was successful
+  google.protobuf.Timestamp deleted_at = 2;
 }
 
 message ListSubscriptionsResponse {
@@ -100,13 +103,13 @@ message ListSubscriptionsResponse {
 message Message {
   string id = 1;                      // Unique ID for the message
   string payload = 2;                 // Content of the message
-  string topic = 5;                  // topic this message belongs to
-  ModifyVisibilityTimeoutRequest modify_visibility_timeout = 6; // Request to modify the visibility timeout
-  bool processed = 7;                 // Indicates if the message has been processed
+  string topic = 3;                 // Topic this message belongs to
+  ModifyVisibilityTimeoutRequest modify_visibility_timeout = 4; // Request to modify the visibility timeout
+  bool processed = 5;                 // Indicates if the message has been processed
 }
 
 message PublishRequest {
-  string topic = 1;                // ID of the topic to publish to
+  string topic_id = 1;                // ID of the topic to publish to
   string payload = 2;                 // Content of the message to publish
 }
 

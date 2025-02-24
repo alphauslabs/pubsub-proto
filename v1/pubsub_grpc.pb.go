@@ -40,26 +40,26 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
-// PubSubService defines the main service for pub/sub operations and CRUD for topics/subscriptions.
+// Service for Pub/Sub
 type PubSubServiceClient interface {
-	// --- CRUD Operations for Topics ---
+	// crud-topic
 	CreateTopic(ctx context.Context, in *CreateTopicRequest, opts ...grpc.CallOption) (*Topic, error)
 	GetTopic(ctx context.Context, in *GetTopicRequest, opts ...grpc.CallOption) (*Topic, error)
 	UpdateTopic(ctx context.Context, in *UpdateTopicRequest, opts ...grpc.CallOption) (*Topic, error)
 	DeleteTopic(ctx context.Context, in *DeleteTopicRequest, opts ...grpc.CallOption) (*DeleteTopicResponse, error)
 	ListTopics(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*ListTopicsResponse, error)
-	// --- CRUD Operations for Subscriptions ---
+	// crud-subscription
 	CreateSubscription(ctx context.Context, in *CreateSubscriptionRequest, opts ...grpc.CallOption) (*Subscription, error)
 	GetSubscription(ctx context.Context, in *GetSubscriptionRequest, opts ...grpc.CallOption) (*Subscription, error)
 	UpdateSubscription(ctx context.Context, in *UpdateSubscriptionRequest, opts ...grpc.CallOption) (*Subscription, error)
 	DeleteSubscription(ctx context.Context, in *DeleteSubscriptionRequest, opts ...grpc.CallOption) (*DeleteSubscriptionResponse, error)
 	ListSubscriptions(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*ListSubscriptionsResponse, error)
-	// --- Pub/Sub Operations ---
+	// pub sub operations
 	Publish(ctx context.Context, in *PublishRequest, opts ...grpc.CallOption) (*PublishResponse, error)
 	Subscribe(ctx context.Context, in *SubscribeRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[Message], error)
 	Acknowledge(ctx context.Context, in *AcknowledgeRequest, opts ...grpc.CallOption) (*AcknowledgeResponse, error)
 	ModifyVisibilityTimeout(ctx context.Context, in *ModifyVisibilityTimeoutRequest, opts ...grpc.CallOption) (*ModifyVisibilityTimeoutResponse, error)
-	// Leader Config Operations
+	// Leader Config Operations - for leaderconfig communication
 	GetLeaderConfig(ctx context.Context, in *GetLeaderConfigRequest, opts ...grpc.CallOption) (*LeaderConfig, error)
 }
 
@@ -234,26 +234,26 @@ func (c *pubSubServiceClient) GetLeaderConfig(ctx context.Context, in *GetLeader
 // All implementations must embed UnimplementedPubSubServiceServer
 // for forward compatibility.
 //
-// PubSubService defines the main service for pub/sub operations and CRUD for topics/subscriptions.
+// Service for Pub/Sub
 type PubSubServiceServer interface {
-	// --- CRUD Operations for Topics ---
+	// crud-topic
 	CreateTopic(context.Context, *CreateTopicRequest) (*Topic, error)
 	GetTopic(context.Context, *GetTopicRequest) (*Topic, error)
 	UpdateTopic(context.Context, *UpdateTopicRequest) (*Topic, error)
 	DeleteTopic(context.Context, *DeleteTopicRequest) (*DeleteTopicResponse, error)
 	ListTopics(context.Context, *Empty) (*ListTopicsResponse, error)
-	// --- CRUD Operations for Subscriptions ---
+	// crud-subscription
 	CreateSubscription(context.Context, *CreateSubscriptionRequest) (*Subscription, error)
 	GetSubscription(context.Context, *GetSubscriptionRequest) (*Subscription, error)
 	UpdateSubscription(context.Context, *UpdateSubscriptionRequest) (*Subscription, error)
 	DeleteSubscription(context.Context, *DeleteSubscriptionRequest) (*DeleteSubscriptionResponse, error)
 	ListSubscriptions(context.Context, *Empty) (*ListSubscriptionsResponse, error)
-	// --- Pub/Sub Operations ---
+	// pub sub operations
 	Publish(context.Context, *PublishRequest) (*PublishResponse, error)
 	Subscribe(*SubscribeRequest, grpc.ServerStreamingServer[Message]) error
 	Acknowledge(context.Context, *AcknowledgeRequest) (*AcknowledgeResponse, error)
 	ModifyVisibilityTimeout(context.Context, *ModifyVisibilityTimeoutRequest) (*ModifyVisibilityTimeoutResponse, error)
-	// Leader Config Operations
+	// Leader Config Operations - for leaderconfig communication
 	GetLeaderConfig(context.Context, *GetLeaderConfigRequest) (*LeaderConfig, error)
 	mustEmbedUnimplementedPubSubServiceServer()
 }
