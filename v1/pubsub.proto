@@ -75,6 +75,7 @@ message Subscription {
 message CreateSubscriptionRequest {
   string topic_id = 1;                 // ID of the topic to subscribe to
   int32 visibility_timeout = 2;       // Default visibility timeout (in seconds)
+  string id = 3;                      // ID of the subscription
 }
 
 message GetSubscriptionRequest {
@@ -119,6 +120,7 @@ message PublishResponse {
 
 message SubscribeRequest {
   string subscription_id = 1;         // ID of the subscription to pull messages from
+  string topic_id = 2;                // ID of the topic to pull messages from
 }
 
 message AcknowledgeRequest {
