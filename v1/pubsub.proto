@@ -120,6 +120,7 @@ message PublishResponse {
 
 message SubscribeRequest {
   string subscription_id = 1;         // ID of the subscription to pull messages from
+  string topic_id = 2;                // ID of the topic to pull messages from
 }
 
 message AcknowledgeRequest {
