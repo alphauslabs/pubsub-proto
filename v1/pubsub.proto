@@ -70,14 +70,14 @@ message Subscription {
   string id = 1;                // Unique ID for the subscription
   string topic_id = 2;          // ID of the topic this subscription belongs to
   int32 visibility_timeout = 3; // Default visibility timeout (in seconds)
-  bool autoextend = 4;          // an option to auto extend the visibility timeout
+  bool autoextend = 4;          //whether this subscription auto extends the visibility timeout
 }
 
 message CreateSubscriptionRequest {
   string topic_id = 1;                 // ID of the topic to subscribe to
   int32 visibility_timeout = 2;       // Default visibility timeout (in seconds)
   string id = 3;                      // ID of the subscription
-  bool autoextend = 4;          // an option to auto extend the visibility timeout
+  optional bool autoextend = 4;          // an option to auto extend the visibility timeout (default is false)
 }
 
 message GetSubscriptionRequest {
@@ -87,7 +87,7 @@ message GetSubscriptionRequest {
 message UpdateSubscriptionRequest {
   string id = 1;                       // ID of the subscription to update
   int32 modify_visibility_timeout = 2; // New visibility timeout (in seconds)
-  bool autoextend = 3;                 // Update autoextend option
+  optional bool autoextend = 4;          // an option to auto extend the visibility timeout (default is false)
 }
 
 message DeleteSubscriptionRequest {
