@@ -3,7 +3,6 @@ syntax = "proto3";
 package pubsubproto;
 
 option go_package = "github.com/alphauslabs/pubsubproto";
-import "google/protobuf/timestamp.proto";
 
 //Service for Pub/Sub
 service PubSubService {
@@ -28,16 +27,13 @@ service PubSubService {
   rpc Acknowledge(AcknowledgeRequest) returns (AcknowledgeResponse) {}
   rpc ModifyVisibilityTimeout(ModifyVisibilityTimeoutRequest) returns (ModifyVisibilityTimeoutResponse) {}
 
-  // Leader Config Operations - for leaderconfig communication
-  rpc GetLeaderConfig(GetLeaderConfigRequest) returns (LeaderConfig) {}
 }
 
 // --- Topic Definitions ---
 message Topic {
-  string id = 1;    // Unique ID for the topic
-  string name = 2;  // Human-readable name for the topic
-  google.protobuf.Timestamp created_at = 3;
-  google.protobuf.Timestamp updated_at = 4;
+  string name = 1;  // Human-readable name for the topic
+  string created_at = 2;
+  string updated_at = 3;
 }
 
 message CreateTopicRequest {
@@ -45,19 +41,16 @@ message CreateTopicRequest {
 }
 
 message GetTopicRequest {
-  string id = 1;          // ID of the topic to retrieve
+  string name = 1;         // Name of the topic to retrieve
 }
 
 message UpdateTopicRequest {
-  string id = 1;          // ID of the topic to update
+  string name = 1;          // name of the topic to update
   string new_name = 2;    // New name for the topic
 }
 
 message DeleteTopicRequest {
-  oneof topic_identifier{
-    string id = 1;
-    string name = 2;
-  }
+  string name = 1;         // Name of the topic to delete
 }
 
 message DeleteTopicResponse {
@@ -70,36 +63,36 @@ message ListTopicsResponse {
 
 // --- Subscription Definitions ---
 message Subscription {
-  string id = 1;                // Unique ID for the subscription
-  string topic_id = 2;          // ID of the topic this subscription belongs to
+  string name = 1;                // name the subscription
+  string topic = 2;          // name of the topic this subscription belongs to
   int32 visibility_timeout = 3; // Default visibility timeout (in seconds)
   bool autoextend = 4;          //whether this subscription auto extends the visibility timeout
 }
 
 message CreateSubscriptionRequest {
-  string topic_id = 1;                 // ID of the topic to subscribe to
+  string topic = 1;                 // name of the topic to subscribe to
   int32 visibility_timeout = 2;       // Default visibility timeout (in seconds)
-  string id = 3;                      // ID of the subscription
+  string name = 3;                      // name of the subscription
   optional bool autoextend = 4;          // an option to auto extend the visibility timeout (default is false)
 }
 
 message GetSubscriptionRequest {
-  string id = 1;                        // ID of the subscription to retrieve
+  string name = 1;                        // ID of the subscription to retrieve
 }
 
 message UpdateSubscriptionRequest {
-  string id = 1;                       // ID of the subscription to update
+  string name = 1;                       // ID of the subscription to update
   int32 modify_visibility_timeout = 2; // New visibility timeout (in seconds)
   optional bool autoextend = 4;          // an option to auto extend the visibility timeout (default is false)
 }
 
 message DeleteSubscriptionRequest {
-  string id = 1;                // ID of the subscription to delete
+  string name = 1;                // ID of the subscription to delete
 }
 
 message DeleteSubscriptionResponse {
   bool success = 1;             // Indicates if the deletion was successful
-  google.protobuf.Timestamp deleted_at = 2;
+  string deleted_at = 2;
 }
 
 message ListSubscriptionsResponse {
@@ -113,11 +106,11 @@ message Message {
   string topic = 3;                 // Topic this message belongs to
   ModifyVisibilityTimeoutRequest modify_visibility_timeout = 4; // Request to modify the visibility timeout
   bool processed = 5;                 // Indicates if the message has been processed
-   bool autoextend = 6;                 // indicates if this message is in an autoextend subscription
+  bool autoextend = 6;                 // indicates if this message is in an autoextend subscription
 }
 
 message PublishRequest {
-  string topic_id = 1;                // ID of the topic to publish to
+  string topic = 1;                // Name of the topic to publish to
   string payload = 2;                 // Content of the message to publish
 }
 
@@ -126,12 +119,12 @@ message PublishResponse {
 }
 
 message SubscribeRequest {
-  string subscription_id = 1;         // ID of the subscription to pull messages from
-  string topic_id = 2;                // ID of the topic to pull messages from
+  string subscription = 1;         // ID of the subscription to pull messages from
+  string topic = 2;                // ID of the topic to pull messages from
 }
 
 message AcknowledgeRequest {
-  string subscription_id = 1;         // ID of the subscription
+  string subscription = 1;         // ID of the subscription
   string id = 2;                      // ID of the message to acknowledge
 }
 
@@ -142,23 +135,14 @@ message AcknowledgeResponse {
 message ModifyVisibilityTimeoutRequest {
   string id = 1;                     // ID of the message to modify
   int32 new_timeout = 2;              // New visibility timeout (in seconds)
-   string subscription_id = 3;         // Subscription ID
+  string subscription_id = 3;         // Subscription ID
 }
 
 message ModifyVisibilityTimeoutResponse {
   bool success = 1;                   // Indicates if the modification was successful
 }
 
-// --- LeaderConfig Definitions ---
-message LeaderConfig {
-  string id = 1;
-  string ip_address = 2;
-  google.protobuf.Timestamp last_seen = 3;
-}
 
-message GetLeaderConfigRequest {
-  string id = 1;
-}
 
 //  --- Empty Message ---
 message Empty {}

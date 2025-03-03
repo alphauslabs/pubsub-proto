@@ -33,7 +33,6 @@ const (
 	PubSubService_Subscribe_FullMethodName               = "/pubsubproto.PubSubService/Subscribe"
 	PubSubService_Acknowledge_FullMethodName             = "/pubsubproto.PubSubService/Acknowledge"
 	PubSubService_ModifyVisibilityTimeout_FullMethodName = "/pubsubproto.PubSubService/ModifyVisibilityTimeout"
-	PubSubService_GetLeaderConfig_FullMethodName         = "/pubsubproto.PubSubService/GetLeaderConfig"
 )
 
 // PubSubServiceClient is the client API for PubSubService service.
@@ -59,8 +58,6 @@ type PubSubServiceClient interface {
 	Subscribe(ctx context.Context, in *SubscribeRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[Message], error)
 	Acknowledge(ctx context.Context, in *AcknowledgeRequest, opts ...grpc.CallOption) (*AcknowledgeResponse, error)
 	ModifyVisibilityTimeout(ctx context.Context, in *ModifyVisibilityTimeoutRequest, opts ...grpc.CallOption) (*ModifyVisibilityTimeoutResponse, error)
-	// Leader Config Operations - for leaderconfig communication
-	GetLeaderConfig(ctx context.Context, in *GetLeaderConfigRequest, opts ...grpc.CallOption) (*LeaderConfig, error)
 }
 
 type pubSubServiceClient struct {
@@ -220,16 +217,6 @@ func (c *pubSubServiceClient) ModifyVisibilityTimeout(ctx context.Context, in *M
 	return out, nil
 }
 
-func (c *pubSubServiceClient) GetLeaderConfig(ctx context.Context, in *GetLeaderConfigRequest, opts ...grpc.CallOption) (*LeaderConfig, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(LeaderConfig)
-	err := c.cc.Invoke(ctx, PubSubService_GetLeaderConfig_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // PubSubServiceServer is the server API for PubSubService service.
 // All implementations must embed UnimplementedPubSubServiceServer
 // for forward compatibility.
@@ -253,8 +240,6 @@ type PubSubServiceServer interface {
 	Subscribe(*SubscribeRequest, grpc.ServerStreamingServer[Message]) error
 	Acknowledge(context.Context, *AcknowledgeRequest) (*AcknowledgeResponse, error)
 	ModifyVisibilityTimeout(context.Context, *ModifyVisibilityTimeoutRequest) (*ModifyVisibilityTimeoutResponse, error)
-	// Leader Config Operations - for leaderconfig communication
-	GetLeaderConfig(context.Context, *GetLeaderConfigRequest) (*LeaderConfig, error)
 	mustEmbedUnimplementedPubSubServiceServer()
 }
 
@@ -306,9 +291,6 @@ func (UnimplementedPubSubServiceServer) Acknowledge(context.Context, *Acknowledg
 }
 func (UnimplementedPubSubServiceServer) ModifyVisibilityTimeout(context.Context, *ModifyVisibilityTimeoutRequest) (*ModifyVisibilityTimeoutResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ModifyVisibilityTimeout not implemented")
-}
-func (UnimplementedPubSubServiceServer) GetLeaderConfig(context.Context, *GetLeaderConfigRequest) (*LeaderConfig, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetLeaderConfig not implemented")
 }
 func (UnimplementedPubSubServiceServer) mustEmbedUnimplementedPubSubServiceServer() {}
 func (UnimplementedPubSubServiceServer) testEmbeddedByValue()                       {}
@@ -576,24 +558,6 @@ func _PubSubService_ModifyVisibilityTimeout_Handler(srv interface{}, ctx context
 	return interceptor(ctx, in, info, handler)
 }
 
-func _PubSubService_GetLeaderConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetLeaderConfigRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(PubSubServiceServer).GetLeaderConfig(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: PubSubService_GetLeaderConfig_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PubSubServiceServer).GetLeaderConfig(ctx, req.(*GetLeaderConfigRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // PubSubService_ServiceDesc is the grpc.ServiceDesc for PubSubService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -652,10 +616,6 @@ var PubSubService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ModifyVisibilityTimeout",
 			Handler:    _PubSubService_ModifyVisibilityTimeout_Handler,
-		},
-		{
-			MethodName: "GetLeaderConfig",
-			Handler:    _PubSubService_GetLeaderConfig_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
