@@ -54,7 +54,10 @@ message UpdateTopicRequest {
 }
 
 message DeleteTopicRequest {
-  string id = 1;          // ID of the topic to delete
+  oneof topic_identifier{
+    string id = 1;
+    string name = 2;
+  }
 }
 
 message DeleteTopicResponse {
