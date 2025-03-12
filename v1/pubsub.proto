@@ -35,6 +35,8 @@ service PubSubService {
   rpc Acknowledge(AcknowledgeRequest) returns (google.protobuf.Empty) {}
 
   rpc ExtendVisibilityTimeout(ExtendVisibilityTimeoutRequest) returns (google.protobuf.Empty) {}
+
+  rpc GetMessagesInQueue(GetMessagesInQueueRequest) returns (GetMessagesInQueueResponse) {}
 }
 
 message Topic {
@@ -172,3 +174,18 @@ message ExtendVisibilityTimeoutRequest {
   string subscription = 2;         
 }
 
+message GetMessagesInQueueRequest {
+  string subscription = 1; 
+
+  int32 limit = 2; 
+}
+
+message GetMessagesInQueueResponse {
+  repeated InQueue inQueue = 1;
+}
+
+message InQueue {
+  string subscription = 1; 
+
+  int32 total = 2; 
+}
