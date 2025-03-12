@@ -1,34 +1,26 @@
-You need to install few things to start contributing:
+# PubSub Proto
 
-- The [protoc](https://protobuf.dev/installation/) tool, a protocol buffer compiler.
+Protocol Buffer definitions for [PubSub](https://github.com/alphauslabs/pubsub).
 
-- The following compiler plugins:
+## Prerequisites
+
+Before contributing to this project, you need to install:
+
+1. The [protoc](https://protobuf.dev/installation/) tool (Protocol Buffer compiler)
+
+2. The required compiler plugins:
 
 ```bash
 $ go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 $ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 ```
 
+## Development Workflow
+
+### Generating gRPC Code
+
 To update generated files:
 
 ```bash
-make generate_grpc_code
+$ make generate_grpc_code
 ```
-
-to update the go libs
-
-```bash
-go get -u google.golang.org/grpc
-```
-it should fade the errors in pubsub_grpc.pb.go and pubsub.pb.go
-
-To cleanup go.mod run this:
-```bash
-go mod tidy
-```
-if error persists in go.mod
-delete go.sum and rerun go mod tidy
-
-export GO_PATH=~/go
-export PATH=$PATH:/$GO_PATH/bin
-source ~/.bash_profile
