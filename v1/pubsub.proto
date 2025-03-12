@@ -111,7 +111,7 @@ message GetSubscriptionResponse {
 message UpdateSubscriptionRequest {
   string name = 1;
 
-  bool autoExtend = 2;  // Defaults to true        
+  bool noAutoExtend = 2;       
 }
 
 message UpdateSubscriptionResponse {
