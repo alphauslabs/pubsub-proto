@@ -97,7 +97,7 @@ message CreateSubscriptionRequest {
 
   string name = 2; 
 
-  bool autoExtend = 3;         
+  bool noAutoExtend = 3;         
 }
 
 message GetSubscriptionRequest {
