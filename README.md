@@ -17,8 +17,6 @@ $ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 
 ## Development Workflow
 
-### Generating gRPC Code
-
 To update generated files:
 
 ```bash
