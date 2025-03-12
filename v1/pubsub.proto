@@ -2,147 +2,173 @@ syntax = "proto3";
 
 package pubsubproto;
 
+import "google/protobuf/empty.proto";
+
 option go_package = "github.com/alphauslabs/pubsubproto";
 
-//Service for Pub/Sub
 service PubSubService {
+  rpc CreateTopic(CreateTopicRequest) returns (google.protobuf.Empty) {}
+  
+  rpc GetTopic(GetTopicRequest) returns (GetTopicResponse) {}
+  
+  rpc UpdateTopic(UpdateTopicRequest) returns (UpdateTopicResponse) {}
+  
+  rpc DeleteTopic(DeleteTopicRequest) returns (google.protobuf.Empty) {}
+  
+  rpc ListTopics(ListTopicsRequest) returns (ListTopicsResponse) {}
 
-  // crud-topic
-  rpc CreateTopic(CreateTopicRequest) returns (Topic) {}
-  rpc GetTopic(GetTopicRequest) returns (Topic) {}
-  rpc UpdateTopic(UpdateTopicRequest) returns (Topic) {}
-  rpc DeleteTopic(DeleteTopicRequest) returns (DeleteTopicResponse) {}
-  rpc ListTopics(Empty) returns (ListTopicsResponse) {}
+  // Subscription related operations
+  rpc CreateSubscription(CreateSubscriptionRequest) returns (google.protobuf.Empty) {}
 
-  // crud-subscription
-  rpc CreateSubscription(CreateSubscriptionRequest) returns (Subscription) {}
-  rpc GetSubscription(GetSubscriptionRequest) returns (Subscription) {}
-  rpc UpdateSubscription(UpdateSubscriptionRequest) returns (Subscription) {}
-  rpc DeleteSubscription(DeleteSubscriptionRequest) returns (DeleteSubscriptionResponse) {}
-  rpc ListSubscriptions(Empty) returns (ListSubscriptionsResponse) {}
+  rpc GetSubscription(GetSubscriptionRequest) returns (GetSubscriptionResponse) {}
 
-  // pub sub operations
+  rpc UpdateSubscription(UpdateSubscriptionRequest) returns (UpdateSubscriptionResponse) {}
+
+  rpc DeleteSubscription(DeleteSubscriptionRequest) returns (google.protobuf.Empty) {}
+
+  rpc ListSubscriptions(ListSubscriptionsRequest) returns (ListSubscriptionsResponse) {}
+
   rpc Publish(PublishRequest) returns (PublishResponse) {}
-  rpc Subscribe(SubscribeRequest) returns (stream Message) {}
-  rpc Acknowledge(AcknowledgeRequest) returns (AcknowledgeResponse) {}
-  rpc ModifyVisibilityTimeout(ModifyVisibilityTimeoutRequest) returns (ModifyVisibilityTimeoutResponse) {}
 
+  rpc Subscribe(SubscribeRequest) returns (stream Message) {}
+
+  rpc Acknowledge(AcknowledgeRequest) returns (google.protobuf.Empty) {}
+
+  rpc ExtendVisibilityTimeout(ExtendVisibilityTimeoutRequest) returns (google.protobuf.Empty) {}
 }
 
-// --- Topic Definitions ---
 message Topic {
-  string name = 1;  // Human-readable name for the topic
-  string created_at = 2;
-  string updated_at = 3;
+  string name = 1;  
+
+  string createdAt = 2;
+  
+  string updatedAt = 3;
 }
 
 message CreateTopicRequest {
-  string name = 1;        // Name of the topic to create
+  string name = 1;      
 }
 
 message GetTopicRequest {
-  string name = 1;         // Name of the topic to retrieve
+  string name = 1;         
+}
+
+message GetTopicResponse {
+  Topic topic = 1;       
 }
 
 message UpdateTopicRequest {
-  string name = 1;          // name of the topic to update
-  string new_name = 2;    // New name for the topic
+  string name = 1;    
+
+  string newName = 2;    
+}
+
+message UpdateTopicResponse {
+  Topic topic = 1;     
 }
 
 message DeleteTopicRequest {
-  string name = 1;         // Name of the topic to delete
+  string name = 1;       
 }
 
 message DeleteTopicResponse {
-  bool success = 1;       // Indicates if the deletion was successful
+  bool success = 1;       
 }
+
+message ListTopicsRequest {}
 
 message ListTopicsResponse {
-  repeated Topic topics = 1; // List of all topics
+  repeated Topic topics = 1;
 }
 
-// --- Subscription Definitions ---
+
+
+
 message Subscription {
-  string name = 1;                // name the subscription
-  string topic = 2;          // name of the topic this subscription belongs to
-  int32 visibility_timeout = 3; // Default visibility timeout (in seconds)
-  bool autoextend = 4;          //whether this subscription auto extends the visibility timeout
+  string name = 1; 
+
+  string topic = 2;   
+
+  bool autoExtend = 3;         
 }
 
 message CreateSubscriptionRequest {
-  string topic = 1;                 // name of the topic to subscribe to
-  int32 visibility_timeout = 2;       // Default visibility timeout (in seconds)
-  string name = 3;                      // name of the subscription
-  optional bool autoextend = 4;          // an option to auto extend the visibility timeout (default is false)
+  string topic = 1;    
+
+  string name = 2; 
+
+  bool autoExtend = 3;         
 }
 
 message GetSubscriptionRequest {
-  string name = 1;                        // ID of the subscription to retrieve
+  string name = 1;                       
+}
+
+message GetSubscriptionResponse {
+  Subscription subscription = 1; 
 }
 
 message UpdateSubscriptionRequest {
-  string name = 1;                       // ID of the subscription to update
-  int32 modify_visibility_timeout = 2; // New visibility timeout (in seconds)
-  optional bool autoextend = 4;          // an option to auto extend the visibility timeout (default is false)
+  string name = 1;
+
+  bool autoExtend = 2;  // Defaults to true        
+}
+
+message UpdateSubscriptionResponse {
+  Subscription subscription = 1; 
 }
 
 message DeleteSubscriptionRequest {
-  string name = 1;                // ID of the subscription to delete
+  string name = 1;               
 }
 
-message DeleteSubscriptionResponse {
-  bool success = 1;             // Indicates if the deletion was successful
-  string deleted_at = 2;
-}
+message ListSubscriptionsRequest {}
 
 message ListSubscriptionsResponse {
-  repeated Subscription subscriptions = 1; // List of all subscriptions
+  repeated Subscription subscriptions = 1; 
 }
 
-// --- Pub/Sub Message Definitions ---
+
 message Message {
-  string id = 1;                      // Unique ID for the message
-  string payload = 2;                 // Content of the message
-  string topic = 3;                 // Topic this message belongs to
-  ModifyVisibilityTimeoutRequest modify_visibility_timeout = 4; // Request to modify the visibility timeout
-  bool processed = 5;                 // Indicates if the message has been processed
-  bool autoextend = 6;                 // indicates if this message is in an autoextend subscription
+  string id = 1;
+
+  string payload = 2;   
+
+  string topic = 3;
+
+  map<string, string> attributes = 4;
 }
 
 message PublishRequest {
-  string topic = 1;                // Name of the topic to publish to
-  string payload = 2;                 // Content of the message to publish
+  string topic = 1;
+
+  string payload = 2;  
+  
+  // Optional attributes for the message
+  map<string, string> attributes = 3;
+
 }
 
 message PublishResponse {
-  string message_id = 1;              // ID of the published message
+  string messageId = 1;            
 }
 
 message SubscribeRequest {
-  string subscription = 1;         // ID of the subscription to pull messages from
-  string topic = 2;                // ID of the topic to pull messages from
+  string subscription = 1; 
+
+  string topic = 2;               
 }
 
 message AcknowledgeRequest {
-  string subscription = 1;         // ID of the subscription
-  string id = 2;                      // ID of the message to acknowledge
-}
+  string subscription = 1;   
 
-message AcknowledgeResponse {
-  bool success = 1;                   // Indicates if the acknowledgment was successful
-}
-
-message ModifyVisibilityTimeoutRequest {
-  string id = 1;                     // ID of the message to modify
-  int32 new_timeout = 2;              // New visibility timeout (in seconds)
-  string subscription_id = 3;         // Subscription ID
-}
-
-message ModifyVisibilityTimeoutResponse {
-  bool success = 1;                   // Indicates if the modification was successful
+  string id = 2;                      
 }
 
 
+message ExtendVisibilityTimeoutRequest {
+  string id = 1; 
 
-//  --- Empty Message ---
-message Empty {}
+  string subscription = 2;         
+}
+
