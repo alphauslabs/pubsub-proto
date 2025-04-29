@@ -35,6 +35,7 @@ const (
 	PubSubService_Acknowledge_FullMethodName             = "/pubsubproto.PubSubService/Acknowledge"
 	PubSubService_ExtendVisibilityTimeout_FullMethodName = "/pubsubproto.PubSubService/ExtendVisibilityTimeout"
 	PubSubService_GetMessagesInQueue_FullMethodName      = "/pubsubproto.PubSubService/GetMessagesInQueue"
+	PubSubService_RequeueMessage_FullMethodName          = "/pubsubproto.PubSubService/RequeueMessage"
 )
 
 // PubSubServiceClient is the client API for PubSubService service.
@@ -57,6 +58,7 @@ type PubSubServiceClient interface {
 	Acknowledge(ctx context.Context, in *AcknowledgeRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	ExtendVisibilityTimeout(ctx context.Context, in *ExtendVisibilityTimeoutRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetMessagesInQueue(ctx context.Context, in *GetMessagesInQueueRequest, opts ...grpc.CallOption) (*GetMessagesInQueueResponse, error)
+	RequeueMessage(ctx context.Context, in *RequeueMessageRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type pubSubServiceClient struct {
@@ -226,6 +228,16 @@ func (c *pubSubServiceClient) GetMessagesInQueue(ctx context.Context, in *GetMes
 	return out, nil
 }
 
+func (c *pubSubServiceClient) RequeueMessage(ctx context.Context, in *RequeueMessageRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, PubSubService_RequeueMessage_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PubSubServiceServer is the server API for PubSubService service.
 // All implementations must embed UnimplementedPubSubServiceServer
 // for forward compatibility.
@@ -246,6 +258,7 @@ type PubSubServiceServer interface {
 	Acknowledge(context.Context, *AcknowledgeRequest) (*emptypb.Empty, error)
 	ExtendVisibilityTimeout(context.Context, *ExtendVisibilityTimeoutRequest) (*emptypb.Empty, error)
 	GetMessagesInQueue(context.Context, *GetMessagesInQueueRequest) (*GetMessagesInQueueResponse, error)
+	RequeueMessage(context.Context, *RequeueMessageRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedPubSubServiceServer()
 }
 
@@ -300,6 +313,9 @@ func (UnimplementedPubSubServiceServer) ExtendVisibilityTimeout(context.Context,
 }
 func (UnimplementedPubSubServiceServer) GetMessagesInQueue(context.Context, *GetMessagesInQueueRequest) (*GetMessagesInQueueResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMessagesInQueue not implemented")
+}
+func (UnimplementedPubSubServiceServer) RequeueMessage(context.Context, *RequeueMessageRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RequeueMessage not implemented")
 }
 func (UnimplementedPubSubServiceServer) mustEmbedUnimplementedPubSubServiceServer() {}
 func (UnimplementedPubSubServiceServer) testEmbeddedByValue()                       {}
@@ -585,6 +601,24 @@ func _PubSubService_GetMessagesInQueue_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PubSubService_RequeueMessage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RequeueMessageRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PubSubServiceServer).RequeueMessage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PubSubService_RequeueMessage_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PubSubServiceServer).RequeueMessage(ctx, req.(*RequeueMessageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PubSubService_ServiceDesc is the grpc.ServiceDesc for PubSubService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -647,6 +681,10 @@ var PubSubService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetMessagesInQueue",
 			Handler:    _PubSubService_GetMessagesInQueue_Handler,
+		},
+		{
+			MethodName: "RequeueMessage",
+			Handler:    _PubSubService_RequeueMessage_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
