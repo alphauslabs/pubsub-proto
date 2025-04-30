@@ -181,9 +181,9 @@ message ExtendVisibilityTimeoutRequest {
 }
 
 message GetMessagesInQueueRequest {
-  string subscription = 1; 
+  string topic = 1; // Filter by topic
 
-  int32 limit = 2; 
+  string subscription = 2; // Filter by subscription
 }
 
 message GetMessagesInQueueResponse {
