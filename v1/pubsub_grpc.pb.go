@@ -36,6 +36,7 @@ const (
 	PubSubService_ExtendVisibilityTimeout_FullMethodName = "/pubsubproto.PubSubService/ExtendVisibilityTimeout"
 	PubSubService_GetMessagesInQueue_FullMethodName      = "/pubsubproto.PubSubService/GetMessagesInQueue"
 	PubSubService_RequeueMessage_FullMethodName          = "/pubsubproto.PubSubService/RequeueMessage"
+	PubSubService_PurgeTopic_FullMethodName              = "/pubsubproto.PubSubService/PurgeTopic"
 )
 
 // PubSubServiceClient is the client API for PubSubService service.
@@ -59,6 +60,7 @@ type PubSubServiceClient interface {
 	ExtendVisibilityTimeout(ctx context.Context, in *ExtendVisibilityTimeoutRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetMessagesInQueue(ctx context.Context, in *GetMessagesInQueueRequest, opts ...grpc.CallOption) (*GetMessagesInQueueResponse, error)
 	RequeueMessage(ctx context.Context, in *RequeueMessageRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	PurgeTopic(ctx context.Context, in *PurgeTopicRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type pubSubServiceClient struct {
@@ -238,6 +240,16 @@ func (c *pubSubServiceClient) RequeueMessage(ctx context.Context, in *RequeueMes
 	return out, nil
 }
 
+func (c *pubSubServiceClient) PurgeTopic(ctx context.Context, in *PurgeTopicRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, PubSubService_PurgeTopic_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PubSubServiceServer is the server API for PubSubService service.
 // All implementations must embed UnimplementedPubSubServiceServer
 // for forward compatibility.
@@ -259,6 +271,7 @@ type PubSubServiceServer interface {
 	ExtendVisibilityTimeout(context.Context, *ExtendVisibilityTimeoutRequest) (*emptypb.Empty, error)
 	GetMessagesInQueue(context.Context, *GetMessagesInQueueRequest) (*GetMessagesInQueueResponse, error)
 	RequeueMessage(context.Context, *RequeueMessageRequest) (*emptypb.Empty, error)
+	PurgeTopic(context.Context, *PurgeTopicRequest) (*emptypb.Empty, error)
 	mustEmbedUnimplementedPubSubServiceServer()
 }
 
@@ -316,6 +329,9 @@ func (UnimplementedPubSubServiceServer) GetMessagesInQueue(context.Context, *Get
 }
 func (UnimplementedPubSubServiceServer) RequeueMessage(context.Context, *RequeueMessageRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RequeueMessage not implemented")
+}
+func (UnimplementedPubSubServiceServer) PurgeTopic(context.Context, *PurgeTopicRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PurgeTopic not implemented")
 }
 func (UnimplementedPubSubServiceServer) mustEmbedUnimplementedPubSubServiceServer() {}
 func (UnimplementedPubSubServiceServer) testEmbeddedByValue()                       {}
@@ -619,6 +635,24 @@ func _PubSubService_RequeueMessage_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PubSubService_PurgeTopic_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PurgeTopicRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PubSubServiceServer).PurgeTopic(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PubSubService_PurgeTopic_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PubSubServiceServer).PurgeTopic(ctx, req.(*PurgeTopicRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PubSubService_ServiceDesc is the grpc.ServiceDesc for PubSubService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -685,6 +719,10 @@ var PubSubService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RequeueMessage",
 			Handler:    _PubSubService_RequeueMessage_Handler,
+		},
+		{
+			MethodName: "PurgeTopic",
+			Handler:    _PubSubService_PurgeTopic_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

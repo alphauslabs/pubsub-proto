@@ -39,6 +39,8 @@ service PubSubService {
   rpc GetMessagesInQueue(GetMessagesInQueueRequest) returns (GetMessagesInQueueResponse) {}
 
   rpc RequeueMessage(RequeueMessageRequest) returns (google.protobuf.Empty) {}
+
+  rpc PurgeTopic(PurgeTopicRequest) returns (google.protobuf.Empty) {}
 }
 
 message Topic {
@@ -202,4 +204,8 @@ message RequeueMessageRequest {
   string subscription = 2;
 
   string topic = 3;
+}
+
+message PurgeTopicRequest {
+  string topic = 1; // Topic to purge
 }
