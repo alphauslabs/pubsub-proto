@@ -60,7 +60,7 @@ type PubSubServiceClient interface {
 	ExtendVisibilityTimeout(ctx context.Context, in *ExtendVisibilityTimeoutRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	GetMessagesInQueue(ctx context.Context, in *GetMessagesInQueueRequest, opts ...grpc.CallOption) (*GetMessagesInQueueResponse, error)
 	RequeueMessage(ctx context.Context, in *RequeueMessageRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	PurgeTopic(ctx context.Context, in *PurgeTopicRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	PurgeTopic(ctx context.Context, in *PurgeTopicRequest, opts ...grpc.CallOption) (*PurgeTopicResponse, error)
 }
 
 type pubSubServiceClient struct {
@@ -240,9 +240,9 @@ func (c *pubSubServiceClient) RequeueMessage(ctx context.Context, in *RequeueMes
 	return out, nil
 }
 
-func (c *pubSubServiceClient) PurgeTopic(ctx context.Context, in *PurgeTopicRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *pubSubServiceClient) PurgeTopic(ctx context.Context, in *PurgeTopicRequest, opts ...grpc.CallOption) (*PurgeTopicResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(emptypb.Empty)
+	out := new(PurgeTopicResponse)
 	err := c.cc.Invoke(ctx, PubSubService_PurgeTopic_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -271,7 +271,7 @@ type PubSubServiceServer interface {
 	ExtendVisibilityTimeout(context.Context, *ExtendVisibilityTimeoutRequest) (*emptypb.Empty, error)
 	GetMessagesInQueue(context.Context, *GetMessagesInQueueRequest) (*GetMessagesInQueueResponse, error)
 	RequeueMessage(context.Context, *RequeueMessageRequest) (*emptypb.Empty, error)
-	PurgeTopic(context.Context, *PurgeTopicRequest) (*emptypb.Empty, error)
+	PurgeTopic(context.Context, *PurgeTopicRequest) (*PurgeTopicResponse, error)
 	mustEmbedUnimplementedPubSubServiceServer()
 }
 
@@ -330,7 +330,7 @@ func (UnimplementedPubSubServiceServer) GetMessagesInQueue(context.Context, *Get
 func (UnimplementedPubSubServiceServer) RequeueMessage(context.Context, *RequeueMessageRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RequeueMessage not implemented")
 }
-func (UnimplementedPubSubServiceServer) PurgeTopic(context.Context, *PurgeTopicRequest) (*emptypb.Empty, error) {
+func (UnimplementedPubSubServiceServer) PurgeTopic(context.Context, *PurgeTopicRequest) (*PurgeTopicResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PurgeTopic not implemented")
 }
 func (UnimplementedPubSubServiceServer) mustEmbedUnimplementedPubSubServiceServer() {}

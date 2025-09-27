@@ -40,7 +40,7 @@ service PubSubService {
 
   rpc RequeueMessage(RequeueMessageRequest) returns (google.protobuf.Empty) {}
 
-  rpc PurgeTopic(PurgeTopicRequest) returns (google.protobuf.Empty) {}
+  rpc PurgeTopic(PurgeTopicRequest) returns (PurgeTopicResponse) {}
 }
 
 message Topic {
@@ -208,4 +208,8 @@ message RequeueMessageRequest {
 
 message PurgeTopicRequest {
   string topic = 1; // Topic to purge
+}
+
+message PurgeTopicResponse {
+  int32 numMessagesPurged = 1; 
 }

@@ -1503,6 +1503,50 @@ func (x *PurgeTopicRequest) GetTopic() string {
 	return ""
 }
 
+type PurgeTopicResponse struct {
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	NumMessagesPurged int32                  `protobuf:"varint,1,opt,name=numMessagesPurged,proto3" json:"numMessagesPurged,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *PurgeTopicResponse) Reset() {
+	*x = PurgeTopicResponse{}
+	mi := &file_v1_pubsub_proto_msgTypes[30]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PurgeTopicResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PurgeTopicResponse) ProtoMessage() {}
+
+func (x *PurgeTopicResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_v1_pubsub_proto_msgTypes[30]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PurgeTopicResponse.ProtoReflect.Descriptor instead.
+func (*PurgeTopicResponse) Descriptor() ([]byte, []int) {
+	return file_v1_pubsub_proto_rawDescGZIP(), []int{30}
+}
+
+func (x *PurgeTopicResponse) GetNumMessagesPurged() int32 {
+	if x != nil {
+		return x.NumMessagesPurged
+	}
+	return 0
+}
+
 var File_v1_pubsub_proto protoreflect.FileDescriptor
 
 const file_v1_pubsub_proto_rawDesc = "" +
@@ -1599,7 +1643,9 @@ const file_v1_pubsub_proto_rawDesc = "" +
 	"\fsubscription\x18\x02 \x01(\tR\fsubscription\x12\x14\n" +
 	"\x05topic\x18\x03 \x01(\tR\x05topic\")\n" +
 	"\x11PurgeTopicRequest\x12\x14\n" +
-	"\x05topic\x18\x01 \x01(\tR\x05topic2\xad\v\n" +
+	"\x05topic\x18\x01 \x01(\tR\x05topic\"B\n" +
+	"\x12PurgeTopicResponse\x12,\n" +
+	"\x11numMessagesPurged\x18\x01 \x01(\x05R\x11numMessagesPurged2\xb6\v\n" +
 	"\rPubSubService\x12H\n" +
 	"\vCreateTopic\x12\x1f.pubsubproto.CreateTopicRequest\x1a\x16.google.protobuf.Empty\"\x00\x12I\n" +
 	"\bGetTopic\x12\x1c.pubsubproto.GetTopicRequest\x1a\x1d.pubsubproto.GetTopicResponse\"\x00\x12R\n" +
@@ -1617,9 +1663,9 @@ const file_v1_pubsub_proto_rawDesc = "" +
 	"\vAcknowledge\x12\x1f.pubsubproto.AcknowledgeRequest\x1a\x16.google.protobuf.Empty\"\x00\x12`\n" +
 	"\x17ExtendVisibilityTimeout\x12+.pubsubproto.ExtendVisibilityTimeoutRequest\x1a\x16.google.protobuf.Empty\"\x00\x12g\n" +
 	"\x12GetMessagesInQueue\x12&.pubsubproto.GetMessagesInQueueRequest\x1a'.pubsubproto.GetMessagesInQueueResponse\"\x00\x12N\n" +
-	"\x0eRequeueMessage\x12\".pubsubproto.RequeueMessageRequest\x1a\x16.google.protobuf.Empty\"\x00\x12F\n" +
+	"\x0eRequeueMessage\x12\".pubsubproto.RequeueMessageRequest\x1a\x16.google.protobuf.Empty\"\x00\x12O\n" +
 	"\n" +
-	"PurgeTopic\x12\x1e.pubsubproto.PurgeTopicRequest\x1a\x16.google.protobuf.Empty\"\x00B$Z\"github.com/alphauslabs/pubsubprotob\x06proto3"
+	"PurgeTopic\x12\x1e.pubsubproto.PurgeTopicRequest\x1a\x1f.pubsubproto.PurgeTopicResponse\"\x00B$Z\"github.com/alphauslabs/pubsubprotob\x06proto3"
 
 var (
 	file_v1_pubsub_proto_rawDescOnce sync.Once
@@ -1633,7 +1679,7 @@ func file_v1_pubsub_proto_rawDescGZIP() []byte {
 	return file_v1_pubsub_proto_rawDescData
 }
 
-var file_v1_pubsub_proto_msgTypes = make([]protoimpl.MessageInfo, 32)
+var file_v1_pubsub_proto_msgTypes = make([]protoimpl.MessageInfo, 33)
 var file_v1_pubsub_proto_goTypes = []any{
 	(*Topic)(nil),                          // 0: pubsubproto.Topic
 	(*CreateTopicRequest)(nil),             // 1: pubsubproto.CreateTopicRequest
@@ -1665,9 +1711,10 @@ var file_v1_pubsub_proto_goTypes = []any{
 	(*InQueue)(nil),                        // 27: pubsubproto.InQueue
 	(*RequeueMessageRequest)(nil),          // 28: pubsubproto.RequeueMessageRequest
 	(*PurgeTopicRequest)(nil),              // 29: pubsubproto.PurgeTopicRequest
-	nil,                                    // 30: pubsubproto.Message.AttributesEntry
-	nil,                                    // 31: pubsubproto.PublishRequest.AttributesEntry
-	(*emptypb.Empty)(nil),                  // 32: google.protobuf.Empty
+	(*PurgeTopicResponse)(nil),             // 30: pubsubproto.PurgeTopicResponse
+	nil,                                    // 31: pubsubproto.Message.AttributesEntry
+	nil,                                    // 32: pubsubproto.PublishRequest.AttributesEntry
+	(*emptypb.Empty)(nil),                  // 33: google.protobuf.Empty
 }
 var file_v1_pubsub_proto_depIdxs = []int32{
 	0,  // 0: pubsubproto.GetTopicResponse.topic:type_name -> pubsubproto.Topic
@@ -1676,8 +1723,8 @@ var file_v1_pubsub_proto_depIdxs = []int32{
 	10, // 3: pubsubproto.GetSubscriptionResponse.subscription:type_name -> pubsubproto.Subscription
 	10, // 4: pubsubproto.UpdateSubscriptionResponse.subscription:type_name -> pubsubproto.Subscription
 	10, // 5: pubsubproto.ListSubscriptionsResponse.subscriptions:type_name -> pubsubproto.Subscription
-	30, // 6: pubsubproto.Message.attributes:type_name -> pubsubproto.Message.AttributesEntry
-	31, // 7: pubsubproto.PublishRequest.attributes:type_name -> pubsubproto.PublishRequest.AttributesEntry
+	31, // 6: pubsubproto.Message.attributes:type_name -> pubsubproto.Message.AttributesEntry
+	32, // 7: pubsubproto.PublishRequest.attributes:type_name -> pubsubproto.PublishRequest.AttributesEntry
 	27, // 8: pubsubproto.GetMessagesInQueueResponse.inQueue:type_name -> pubsubproto.InQueue
 	1,  // 9: pubsubproto.PubSubService.CreateTopic:input_type -> pubsubproto.CreateTopicRequest
 	2,  // 10: pubsubproto.PubSubService.GetTopic:input_type -> pubsubproto.GetTopicRequest
@@ -1696,23 +1743,23 @@ var file_v1_pubsub_proto_depIdxs = []int32{
 	25, // 23: pubsubproto.PubSubService.GetMessagesInQueue:input_type -> pubsubproto.GetMessagesInQueueRequest
 	28, // 24: pubsubproto.PubSubService.RequeueMessage:input_type -> pubsubproto.RequeueMessageRequest
 	29, // 25: pubsubproto.PubSubService.PurgeTopic:input_type -> pubsubproto.PurgeTopicRequest
-	32, // 26: pubsubproto.PubSubService.CreateTopic:output_type -> google.protobuf.Empty
+	33, // 26: pubsubproto.PubSubService.CreateTopic:output_type -> google.protobuf.Empty
 	3,  // 27: pubsubproto.PubSubService.GetTopic:output_type -> pubsubproto.GetTopicResponse
 	5,  // 28: pubsubproto.PubSubService.UpdateTopic:output_type -> pubsubproto.UpdateTopicResponse
-	32, // 29: pubsubproto.PubSubService.DeleteTopic:output_type -> google.protobuf.Empty
+	33, // 29: pubsubproto.PubSubService.DeleteTopic:output_type -> google.protobuf.Empty
 	9,  // 30: pubsubproto.PubSubService.ListTopics:output_type -> pubsubproto.ListTopicsResponse
-	32, // 31: pubsubproto.PubSubService.CreateSubscription:output_type -> google.protobuf.Empty
+	33, // 31: pubsubproto.PubSubService.CreateSubscription:output_type -> google.protobuf.Empty
 	13, // 32: pubsubproto.PubSubService.GetSubscription:output_type -> pubsubproto.GetSubscriptionResponse
 	15, // 33: pubsubproto.PubSubService.UpdateSubscription:output_type -> pubsubproto.UpdateSubscriptionResponse
-	32, // 34: pubsubproto.PubSubService.DeleteSubscription:output_type -> google.protobuf.Empty
+	33, // 34: pubsubproto.PubSubService.DeleteSubscription:output_type -> google.protobuf.Empty
 	18, // 35: pubsubproto.PubSubService.ListSubscriptions:output_type -> pubsubproto.ListSubscriptionsResponse
 	21, // 36: pubsubproto.PubSubService.Publish:output_type -> pubsubproto.PublishResponse
 	19, // 37: pubsubproto.PubSubService.Subscribe:output_type -> pubsubproto.Message
-	32, // 38: pubsubproto.PubSubService.Acknowledge:output_type -> google.protobuf.Empty
-	32, // 39: pubsubproto.PubSubService.ExtendVisibilityTimeout:output_type -> google.protobuf.Empty
+	33, // 38: pubsubproto.PubSubService.Acknowledge:output_type -> google.protobuf.Empty
+	33, // 39: pubsubproto.PubSubService.ExtendVisibilityTimeout:output_type -> google.protobuf.Empty
 	26, // 40: pubsubproto.PubSubService.GetMessagesInQueue:output_type -> pubsubproto.GetMessagesInQueueResponse
-	32, // 41: pubsubproto.PubSubService.RequeueMessage:output_type -> google.protobuf.Empty
-	32, // 42: pubsubproto.PubSubService.PurgeTopic:output_type -> google.protobuf.Empty
+	33, // 41: pubsubproto.PubSubService.RequeueMessage:output_type -> google.protobuf.Empty
+	30, // 42: pubsubproto.PubSubService.PurgeTopic:output_type -> pubsubproto.PurgeTopicResponse
 	26, // [26:43] is the sub-list for method output_type
 	9,  // [9:26] is the sub-list for method input_type
 	9,  // [9:9] is the sub-list for extension type_name
@@ -1731,7 +1778,7 @@ func file_v1_pubsub_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_v1_pubsub_proto_rawDesc), len(file_v1_pubsub_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   32,
+			NumMessages:   33,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
