@@ -41,6 +41,8 @@ service PubSubService {
   rpc RequeueMessage(RequeueMessageRequest) returns (google.protobuf.Empty) {}
 
   rpc PurgeTopic(PurgeTopicRequest) returns (PurgeTopicResponse) {}
+
+  rpc ListHash(google.protobuf.Empty) returns (ListHashResponse) {}
 }
 
 message Topic {
@@ -212,4 +214,13 @@ message PurgeTopicRequest {
 
 message PurgeTopicResponse {
   int32 numMessagesPurged = 1; 
+}
+
+message HashDetails {
+  string hash = 1;
+  string subscription = 2;
+}
+
+message ListHashResponse {
+  repeated HashDetails hashes = 1;
 }

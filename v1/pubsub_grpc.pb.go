@@ -37,6 +37,7 @@ const (
 	PubSubService_GetMessagesInQueue_FullMethodName      = "/pubsubproto.PubSubService/GetMessagesInQueue"
 	PubSubService_RequeueMessage_FullMethodName          = "/pubsubproto.PubSubService/RequeueMessage"
 	PubSubService_PurgeTopic_FullMethodName              = "/pubsubproto.PubSubService/PurgeTopic"
+	PubSubService_ListHash_FullMethodName                = "/pubsubproto.PubSubService/ListHash"
 )
 
 // PubSubServiceClient is the client API for PubSubService service.
@@ -61,6 +62,7 @@ type PubSubServiceClient interface {
 	GetMessagesInQueue(ctx context.Context, in *GetMessagesInQueueRequest, opts ...grpc.CallOption) (*GetMessagesInQueueResponse, error)
 	RequeueMessage(ctx context.Context, in *RequeueMessageRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	PurgeTopic(ctx context.Context, in *PurgeTopicRequest, opts ...grpc.CallOption) (*PurgeTopicResponse, error)
+	ListHash(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListHashResponse, error)
 }
 
 type pubSubServiceClient struct {
@@ -250,6 +252,16 @@ func (c *pubSubServiceClient) PurgeTopic(ctx context.Context, in *PurgeTopicRequ
 	return out, nil
 }
 
+func (c *pubSubServiceClient) ListHash(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ListHashResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListHashResponse)
+	err := c.cc.Invoke(ctx, PubSubService_ListHash_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PubSubServiceServer is the server API for PubSubService service.
 // All implementations must embed UnimplementedPubSubServiceServer
 // for forward compatibility.
@@ -272,6 +284,7 @@ type PubSubServiceServer interface {
 	GetMessagesInQueue(context.Context, *GetMessagesInQueueRequest) (*GetMessagesInQueueResponse, error)
 	RequeueMessage(context.Context, *RequeueMessageRequest) (*emptypb.Empty, error)
 	PurgeTopic(context.Context, *PurgeTopicRequest) (*PurgeTopicResponse, error)
+	ListHash(context.Context, *emptypb.Empty) (*ListHashResponse, error)
 	mustEmbedUnimplementedPubSubServiceServer()
 }
 
@@ -332,6 +345,9 @@ func (UnimplementedPubSubServiceServer) RequeueMessage(context.Context, *Requeue
 }
 func (UnimplementedPubSubServiceServer) PurgeTopic(context.Context, *PurgeTopicRequest) (*PurgeTopicResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PurgeTopic not implemented")
+}
+func (UnimplementedPubSubServiceServer) ListHash(context.Context, *emptypb.Empty) (*ListHashResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListHash not implemented")
 }
 func (UnimplementedPubSubServiceServer) mustEmbedUnimplementedPubSubServiceServer() {}
 func (UnimplementedPubSubServiceServer) testEmbeddedByValue()                       {}
@@ -653,6 +669,24 @@ func _PubSubService_PurgeTopic_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PubSubService_ListHash_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PubSubServiceServer).ListHash(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PubSubService_ListHash_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PubSubServiceServer).ListHash(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PubSubService_ServiceDesc is the grpc.ServiceDesc for PubSubService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -723,6 +757,10 @@ var PubSubService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PurgeTopic",
 			Handler:    _PubSubService_PurgeTopic_Handler,
+		},
+		{
+			MethodName: "ListHash",
+			Handler:    _PubSubService_ListHash_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
