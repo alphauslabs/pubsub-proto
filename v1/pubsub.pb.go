@@ -689,7 +689,7 @@ func (x *GetSubscriptionResponse) GetSubscription() *Subscription {
 type UpdateSubscriptionRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	NoAutoExtend  bool                   `protobuf:"varint,2,opt,name=noAutoExtend,proto3" json:"noAutoExtend,omitempty"`
+	AutoExtend    bool                   `protobuf:"varint,2,opt,name=autoExtend,proto3" json:"autoExtend,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -731,9 +731,9 @@ func (x *UpdateSubscriptionRequest) GetName() string {
 	return ""
 }
 
-func (x *UpdateSubscriptionRequest) GetNoAutoExtend() bool {
+func (x *UpdateSubscriptionRequest) GetAutoExtend() bool {
 	if x != nil {
-		return x.NoAutoExtend
+		return x.AutoExtend
 	}
 	return false
 }
@@ -1685,10 +1685,12 @@ const file_v1_pubsub_proto_rawDesc = "" +
 	"\x16GetSubscriptionRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\"X\n" +
 	"\x17GetSubscriptionResponse\x12=\n" +
-	"\fsubscription\x18\x01 \x01(\v2\x19.pubsubproto.SubscriptionR\fsubscription\"S\n" +
+	"\fsubscription\x18\x01 \x01(\v2\x19.pubsubproto.SubscriptionR\fsubscription\"O\n" +
 	"\x19UpdateSubscriptionRequest\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\x12\"\n" +
-	"\fnoAutoExtend\x18\x02 \x01(\bR\fnoAutoExtend\"[\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12\x1e\n" +
+	"\n" +
+	"autoExtend\x18\x02 \x01(\bR\n" +
+	"autoExtend\"[\n" +
 	"\x1aUpdateSubscriptionResponse\x12=\n" +
 	"\fsubscription\x18\x01 \x01(\v2\x19.pubsubproto.SubscriptionR\fsubscription\"/\n" +
 	"\x19DeleteSubscriptionRequest\x12\x12\n" +
