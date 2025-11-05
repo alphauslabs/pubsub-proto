@@ -105,7 +105,7 @@ message CreateSubscriptionRequest {
 
   string name = 2; 
 
-  bool noAutoExtend = 3;         
+  bool autoExtend = 3;         
 }
 
 message GetSubscriptionRequest {
@@ -119,7 +119,7 @@ message GetSubscriptionResponse {
 message UpdateSubscriptionRequest {
   string name = 1;
 
-  bool noAutoExtend = 2;       
+  bool autoExtend = 2;       
 }
 
 message UpdateSubscriptionResponse {
