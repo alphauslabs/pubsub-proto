@@ -25,6 +25,7 @@ const (
 type Topic struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Subscriptions []string               `protobuf:"bytes,4,rep,name=subscriptions,proto3" json:"subscriptions,omitempty"`
 	CreatedAt     string                 `protobuf:"bytes,2,opt,name=createdAt,proto3" json:"createdAt,omitempty"`
 	UpdatedAt     string                 `protobuf:"bytes,3,opt,name=updatedAt,proto3" json:"updatedAt,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -66,6 +67,13 @@ func (x *Topic) GetName() string {
 		return x.Name
 	}
 	return ""
+}
+
+func (x *Topic) GetSubscriptions() []string {
+	if x != nil {
+		return x.Subscriptions
+	}
+	return nil
 }
 
 func (x *Topic) GetCreatedAt() string {
@@ -1647,9 +1655,10 @@ var File_v1_pubsub_proto protoreflect.FileDescriptor
 
 const file_v1_pubsub_proto_rawDesc = "" +
 	"\n" +
-	"\x0fv1/pubsub.proto\x12\vpubsubproto\x1a\x1bgoogle/protobuf/empty.proto\"W\n" +
+	"\x0fv1/pubsub.proto\x12\vpubsubproto\x1a\x1bgoogle/protobuf/empty.proto\"}\n" +
 	"\x05Topic\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\x12\x1c\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12$\n" +
+	"\rsubscriptions\x18\x04 \x03(\tR\rsubscriptions\x12\x1c\n" +
 	"\tcreatedAt\x18\x02 \x01(\tR\tcreatedAt\x12\x1c\n" +
 	"\tupdatedAt\x18\x03 \x01(\tR\tupdatedAt\"(\n" +
 	"\x12CreateTopicRequest\x12\x12\n" +

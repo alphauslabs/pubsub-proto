@@ -46,7 +46,9 @@ service PubSubService {
 }
 
 message Topic {
-  string name = 1;  
+  string name = 1;
+
+  repeated string subscriptions = 4;
 
   string createdAt = 2;
   
