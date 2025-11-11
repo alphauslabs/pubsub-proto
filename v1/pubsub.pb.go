@@ -1135,7 +1135,6 @@ type AcknowledgeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Subscription  string                 `protobuf:"bytes,1,opt,name=subscription,proto3" json:"subscription,omitempty"`
 	Id            string                 `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
-	Topic         string                 `protobuf:"bytes,3,opt,name=topic,proto3" json:"topic,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1184,18 +1183,10 @@ func (x *AcknowledgeRequest) GetId() string {
 	return ""
 }
 
-func (x *AcknowledgeRequest) GetTopic() string {
-	if x != nil {
-		return x.Topic
-	}
-	return ""
-}
-
 type ExtendVisibilityTimeoutRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Subscription  string                 `protobuf:"bytes,2,opt,name=subscription,proto3" json:"subscription,omitempty"`
-	Topic         string                 `protobuf:"bytes,3,opt,name=topic,proto3" json:"topic,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1240,13 +1231,6 @@ func (x *ExtendVisibilityTimeoutRequest) GetId() string {
 func (x *ExtendVisibilityTimeoutRequest) GetSubscription() string {
 	if x != nil {
 		return x.Subscription
-	}
-	return ""
-}
-
-func (x *ExtendVisibilityTimeoutRequest) GetTopic() string {
-	if x != nil {
-		return x.Topic
 	}
 	return ""
 }
@@ -1721,15 +1705,13 @@ const file_v1_pubsub_proto_rawDesc = "" +
 	"\x0fPublishResponse\x12\x1c\n" +
 	"\tmessageId\x18\x01 \x01(\tR\tmessageId\"6\n" +
 	"\x10SubscribeRequest\x12\"\n" +
-	"\fsubscription\x18\x01 \x01(\tR\fsubscription\"^\n" +
+	"\fsubscription\x18\x01 \x01(\tR\fsubscription\"H\n" +
 	"\x12AcknowledgeRequest\x12\"\n" +
 	"\fsubscription\x18\x01 \x01(\tR\fsubscription\x12\x0e\n" +
-	"\x02id\x18\x02 \x01(\tR\x02id\x12\x14\n" +
-	"\x05topic\x18\x03 \x01(\tR\x05topic\"j\n" +
+	"\x02id\x18\x02 \x01(\tR\x02id\"T\n" +
 	"\x1eExtendVisibilityTimeoutRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\"\n" +
-	"\fsubscription\x18\x02 \x01(\tR\fsubscription\x12\x14\n" +
-	"\x05topic\x18\x03 \x01(\tR\x05topic\"U\n" +
+	"\fsubscription\x18\x02 \x01(\tR\fsubscription\"U\n" +
 	"\x19GetMessagesInQueueRequest\x12\x14\n" +
 	"\x05topic\x18\x01 \x01(\tR\x05topic\x12\"\n" +
 	"\fsubscription\x18\x02 \x01(\tR\fsubscription\"L\n" +

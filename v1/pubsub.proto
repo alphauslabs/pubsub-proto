@@ -171,8 +171,6 @@ message AcknowledgeRequest {
   string subscription = 1;   
 
   string id = 2;   
-  
-  string topic = 3;
 }
 
 
@@ -180,8 +178,6 @@ message ExtendVisibilityTimeoutRequest {
   string id = 1; 
 
   string subscription = 2;         
-
-  string topic = 3;
 }
 
 message GetMessagesInQueueRequest {
