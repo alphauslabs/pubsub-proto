@@ -165,8 +165,6 @@ message PublishResponse {
 
 message SubscribeRequest {
   string subscription = 1; 
-
-  string topic = 2;               
 }
 
 message AcknowledgeRequest {

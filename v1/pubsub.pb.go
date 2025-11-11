@@ -1090,7 +1090,6 @@ func (x *PublishResponse) GetMessageId() string {
 type SubscribeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Subscription  string                 `protobuf:"bytes,1,opt,name=subscription,proto3" json:"subscription,omitempty"`
-	Topic         string                 `protobuf:"bytes,2,opt,name=topic,proto3" json:"topic,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1128,13 +1127,6 @@ func (*SubscribeRequest) Descriptor() ([]byte, []int) {
 func (x *SubscribeRequest) GetSubscription() string {
 	if x != nil {
 		return x.Subscription
-	}
-	return ""
-}
-
-func (x *SubscribeRequest) GetTopic() string {
-	if x != nil {
-		return x.Topic
 	}
 	return ""
 }
@@ -1727,10 +1719,9 @@ const file_v1_pubsub_proto_rawDesc = "" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"/\n" +
 	"\x0fPublishResponse\x12\x1c\n" +
-	"\tmessageId\x18\x01 \x01(\tR\tmessageId\"L\n" +
+	"\tmessageId\x18\x01 \x01(\tR\tmessageId\"6\n" +
 	"\x10SubscribeRequest\x12\"\n" +
-	"\fsubscription\x18\x01 \x01(\tR\fsubscription\x12\x14\n" +
-	"\x05topic\x18\x02 \x01(\tR\x05topic\"^\n" +
+	"\fsubscription\x18\x01 \x01(\tR\fsubscription\"^\n" +
 	"\x12AcknowledgeRequest\x12\"\n" +
 	"\fsubscription\x18\x01 \x01(\tR\fsubscription\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\tR\x02id\x12\x14\n" +
