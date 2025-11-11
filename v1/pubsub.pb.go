@@ -1387,7 +1387,6 @@ type RequeueMessageRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // Message Id
 	Subscription  string                 `protobuf:"bytes,2,opt,name=subscription,proto3" json:"subscription,omitempty"`
-	Topic         string                 `protobuf:"bytes,3,opt,name=topic,proto3" json:"topic,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1432,13 +1431,6 @@ func (x *RequeueMessageRequest) GetId() string {
 func (x *RequeueMessageRequest) GetSubscription() string {
 	if x != nil {
 		return x.Subscription
-	}
-	return ""
-}
-
-func (x *RequeueMessageRequest) GetTopic() string {
-	if x != nil {
-		return x.Topic
 	}
 	return ""
 }
@@ -1719,11 +1711,10 @@ const file_v1_pubsub_proto_rawDesc = "" +
 	"\ainQueue\x18\x01 \x03(\v2\x14.pubsubproto.InQueueR\ainQueue\"C\n" +
 	"\aInQueue\x12\"\n" +
 	"\fsubscription\x18\x01 \x01(\tR\fsubscription\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x05R\x05total\"a\n" +
+	"\x05total\x18\x02 \x01(\x05R\x05total\"K\n" +
 	"\x15RequeueMessageRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\"\n" +
-	"\fsubscription\x18\x02 \x01(\tR\fsubscription\x12\x14\n" +
-	"\x05topic\x18\x03 \x01(\tR\x05topic\")\n" +
+	"\fsubscription\x18\x02 \x01(\tR\fsubscription\")\n" +
 	"\x11PurgeTopicRequest\x12\x14\n" +
 	"\x05topic\x18\x01 \x01(\tR\x05topic\"B\n" +
 	"\x12PurgeTopicResponse\x12,\n" +

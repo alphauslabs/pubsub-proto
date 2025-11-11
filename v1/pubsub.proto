@@ -200,8 +200,6 @@ message RequeueMessageRequest {
   string id = 1; // Message Id
 
   string subscription = 2;
-
-  string topic = 3;
 }
 
 message PurgeTopicRequest {
